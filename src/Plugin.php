@@ -1,0 +1,34 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: stevewinter
+ * Date: 28/07/2018
+ * Time: 12:39
+ */
+
+namespace FMDataAPI;
+
+class Plugin
+{
+    /** @var Admin */
+    protected $admin;
+
+    /** @var ShortCodes */
+    protected $shortcodes;
+
+    public function __construct()
+    {
+        add_action('init', [$this, 'fmDataApiRegisterSession']);
+
+        $settings = get_option( FM_DATA_API_SETTINGS, Admin::fmDataApiDefaultOptions());
+        $api = new FileMakerDataAPI($settings);
+
+        $this->admin = new Admin();
+        $this->shortcodes = new ShortCodes($api, $settings);
+    }
+
+    public function fmDataApiRegisterSession(){
+        if( !session_id() )
+            session_start();
+    }
+}
