@@ -36,12 +36,10 @@ class ShortCodes
 
         try {
             $records = $this->api->findAll($attr['layout']);
-            print($this->generateTable($records, $attr));
+            return $this->generateTable($records, $attr);
         } catch (Exception $e) {
-            print('Unable to load records.');
+            return 'Unable to load records.';
         }
-
-        return '';
     }
 
     public function retrieveFieldContent(array $attr)
