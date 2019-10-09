@@ -206,6 +206,10 @@ class FileMakerDataAPI
             'headers' => $headers
         ]);
 
+        if(is_a($response, 'WP_Error')) {
+            throw new Exception(sprintf(': %s',  $response->get_error_message()));
+        }
+
         if($response) {
             $responseObj = json_decode($response['body'], false);
             $responseCode = $responseObj->messages[0]->code;

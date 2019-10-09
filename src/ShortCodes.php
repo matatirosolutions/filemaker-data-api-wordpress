@@ -121,6 +121,7 @@ class ShortCodes
 
         switch(substr(strtolower($type), 0, 5)) {
             case 'image':
+            case 'thumb':
                 $content = $this->sizeImage($type, $record[$field]);
                 break;
             case 'curre':
@@ -130,9 +131,6 @@ class ShortCodes
                     setlocale(LC_ALL, $this->settings->getLocale());
                     $content = (money_format('%#10n', $record[$field]));
                 }
-                break;
-            case 'thumb':
-                $content = $this->sizeImage($type, $record[$field]);
                 break;
             default:
                 $content = nl2br($record[$field]);
