@@ -81,9 +81,16 @@ EOHTML;
             $title = ucfirst($setting);
             $value = $settings->{'get'.$setting}();
 
-            $html .= 'locale' == $setting
-                ? $this->localeSettingSelector($value)
-                : $this->inputBox($setting, $title, $value);
+            switch($setting) {
+                case 'locale':
+                    $html .= $this->localeSettingSelector($value);
+                    break;
+                case 'verify':
+                    $html .= $this->verifyCheckbox($value);
+                    break;
+                default:
+                    $html .= $this->inputBox($setting, $title, $value);
+            }
         }
 
         $html .= <<<EOHTML
@@ -128,6 +135,25 @@ EOHTML;
                 <td><input type="{$type}" name="{$setting}" value="{$value}" size="20"></td>
             </tr>
 EOHTML;
+    }
+
+    private function verifyCheckbox($value)
+    {
+        $checked = $value ? ' checked' : '';
+        return <<<EOHTML
+            <tr>
+                <th scope="row"><label for="verify">Do not verify SSL</label></th>
+                <td>
+                    <input type="hidden" name="verify" value="0">
+                    <input type="checkbox" name="verify" value="1"{$checked} />
+                    <span style="font-size: 11px">
+                        In general this is a bad idea and you should only enable this for testing purposes<br />
+                        where you simply can't install a valid SSL certificate for your FMS.
+                    </span>
+                </td>
+            </tr>
+EOHTML;
+
     }
 
 
