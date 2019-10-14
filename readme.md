@@ -22,10 +22,11 @@ Pull all records from the specified layout and generate a table of records.
 |types|The type of each field. Currently supported are <ul><li>Currency - displays a number in the selected currency (see the settings screen for locale selection)</li><li>Image, which can optionally be follwed by a hypehen and an integer value (e.g. Image-100) which will set the width to 100px (defaults to full size)</li><li>Thumbnail - as for image, however defaults to 50px</li><li>`null` - outputs the content of the field</li></ul>| false| 
 |id-field|Which field on the layout acts as a primary key for the given layout|false|
 |detail-url|If both this and the id-field are set then the content of the cells is converted to a link to the URL. You must provide the location in the URL which the value of id-field will be embded in using `*id*` e.g. `detail-url="/product/?id=*id*"` |false|
+|query|The JSON encoded query to apply to the records selected in the form `'field': '{ operator } value'`.<br><br>It is simplest to use single quotes for the JSON object, which will be transposed prior to submission to FM. e.g. `query="{'Unit Price': '&lt;500', 'Availability': 'In stock'}"`.<br><br>Note that depending on the exact Wordpress editor you're using then less than, and greater than signs may be html encoded. Again, the parser will cope with that. Also be aware that you're performing an `AND` query if you specify more than one key / value pair.|false|
 
 Example
 ```
- [FM-DATA-TABLE layout="Product Details" fields="Image|Part Number|Name|Unit Cost|Category|Availability" types="Thumbnail-20|||Currency||" id-field="Part Number" detail-url="/product/?id=*id*" ]
+ [FM-DATA-TABLE layout="Product Details" fields="Image|Part Number|Name|Unit Price|Category|Availability" types="Thumbnail-50|||Currency||" id-field="Part Number" detail-url="/product/?id=*id*" query="{'Unit Price': '&lt;500', 'Availability': 'In stock'}"]
 ```
 
 ### [FM-DATA-FIELD]
@@ -53,5 +54,4 @@ Examples
 ### TODO
 <ul>
 <li>More output types</li>
-<li>Ability to query for table rows</li>
 <li>Write data back to FM</li>

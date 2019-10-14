@@ -13,7 +13,7 @@ class Plugin
     /** @var Admin */
     protected $admin;
 
-    /** @var ShortCodes */
+    /** @var array */
     protected $shortcodes;
 
     public function __construct()
@@ -24,7 +24,10 @@ class Plugin
         $api = new FileMakerDataAPI($settings);
 
         $this->admin = new Admin();
-        $this->shortcodes = new ShortCodes($api, $settings);
+        $this->shortcodes = [
+            new ShortCodeField($api, $settings),
+            new ShortCodeTable($api, $settings),
+        ];
     }
 
     public function fmDataApiRegisterSession(){

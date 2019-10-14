@@ -8,29 +8,32 @@
 
 namespace FMDataAPI;
 
+use \Exception;
+
 class Settings
 {
-    const DATA_API_PARAMETERS = ['server', 'port', 'database', 'username', 'password', 'locale'];
+    const DATA_API_PARAMETERS = ['server', 'port', 'database', 'username', 'password', 'verify', 'locale'];
 
     protected $server;
     protected $port;
     protected $database;
     protected $username;
     protected $password;
+    protected $verify;
     protected $locale;
 
     /**
      * @param array $array
      *
      * @return Settings
-     * @throws \Exception
+     * @throws Exception
      */
     public static function CreateFromArray(array $array)
     {
         $settings = new static();
         foreach(static::DATA_API_PARAMETERS as $parameter) {
             if(!array_key_exists($parameter, $array)) {
-                throw new \Exception(sprintf('Missing parameter %s', $parameter));
+                throw new Exception(sprintf('Missing parameter %s', $parameter));
             }
 
             $settings->$parameter = $array[$parameter];
@@ -85,5 +88,13 @@ class Settings
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDoNotVerify()
+    {
+        return $this->verify;
     }
 }

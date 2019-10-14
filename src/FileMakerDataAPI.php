@@ -80,15 +80,15 @@ class FileMakerDataAPI
     }
 
     /**
-     * @param $layout
-     * @param $query
+     * @param string $layout
+     * @param array $query
      * @param bool $class
      *
      * @return array
      *
      * @throws Exception
      */
-    public function find($layout, $query)
+    public function find(string $layout, array $query)
     {
         $queryHash = md5(
             serialize($query)
@@ -127,6 +127,10 @@ class FileMakerDataAPI
                 'Content-Type' => 'application/json'
             ]
         ];
+
+        if($this->settings->getDoNotVerify()) {
+            $params['sslverify'] = false;
+        }
 
         $request = new WP_Http();
         $response = $request->request($uri, array_merge($params, $options));
@@ -196,15 +200,20 @@ class FileMakerDataAPI
      */
     public function fetchToken()
     {
-        $headers = [
-            'Authorization' => 'Basic '.base64_encode("{$this->settings->getUsername()}:{$this->settings->getPassword()}"),
-            'Content-Type' => 'application/json'
-        ];
-        $request = new WP_Http();
-        $response = $request->request($this->baseURI . 'sessions', [
+        $params = [
             'method' => 'POST',
-            'headers' => $headers
-        ]);
+            'headers' => [
+                'Authorization' => 'Basic '.base64_encode("{$this->settings->getUsername()}:{$this->settings->getPassword()}"),
+                'Content-Type' => 'application/json'
+            ]
+        ];
+
+        if($this->settings->getDoNotVerify()) {
+            $params['sslverify'] = false;
+        }
+
+        $request = new WP_Http();
+        $response = $request->request($this->baseURI . 'sessions', $params);
 
         if(is_a($response, 'WP_Error')) {
             throw new Exception(sprintf(': %s',  $response->get_error_message()));
