@@ -97,4 +97,12 @@ class Settings
     {
         return $this->verify;
     }
+
+    /**
+    * @return boolean
+    */
+    public function getVerify()
+    {
+        return $this->verify;
+    }
 }

@@ -169,6 +169,7 @@ EOHTML;
                 'database' => '',
                 'username' => '',
                 'password' => '',
+                'verify' => 0,
                 'locale' => 'en_US',
             ]);
         } catch(Exception $e) {}
