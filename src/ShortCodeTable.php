@@ -74,7 +74,7 @@ class ShortCodeTable extends ShortCodeBase
      *
      * @return array
      */
-    private function parseQueryToJSON(string $queryString)
+    private function parseQueryToJSON($queryString)
     {
         $reformattedQuery = html_entity_decode(
             str_replace("'", '"', $queryString)

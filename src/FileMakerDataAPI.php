@@ -82,13 +82,12 @@ class FileMakerDataAPI
     /**
      * @param string $layout
      * @param array $query
-     * @param bool $class
      *
      * @return array
      *
      * @throws Exception
      */
-    public function find(string $layout, array $query)
+    public function find($layout, array $query)
     {
         $queryHash = md5(
             serialize($query)
