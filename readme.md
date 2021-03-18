@@ -56,7 +56,7 @@ If you need to run a FileMaker script from within your WordPress site a filter i
 $param = new \FMDataAPI\ScriptParameter('My Layout', 'My Script', json_encode(['foo' => 'bah']));
 $result = apply_filters('fm-call-script', $param);
 ```
-The `ScriptParameter` object takes three parameter
+The `ScriptParameter` object takes three parameters:
 
 | Parameter | Description | Required
 |---|---|---|
