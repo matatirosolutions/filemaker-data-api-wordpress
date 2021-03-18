@@ -110,6 +110,44 @@ class FileMakerDataAPI
     }
 
     /**
+     * @param $layout
+     * @param $script
+     * @param $param
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    function callScript($layout, $script, $param)
+    {
+       $url = $this->baseURI . sprintf('layouts/%s/script/%s?script.param=%s', $layout, $script, urlencode($param));
+        $this->setOrFetchToken();
+
+        try {
+            $data = $this->performFMRequest('GET', $url, []);
+            if(0 !== (int)$data['response']['scriptError']) {
+                throw new Exception($data['messages'][0]['message'], -1);
+            }
+
+            if(isset($data['response']['scriptResult'])) {
+                $decode = json_decode($data['response']['scriptResult'], true);
+                if(null === $decode) {
+                    return ['result' => $data['response']['scriptResult']];
+                }
+                if(is_array($decode)) {
+                    return $decode;
+                }
+                return ['result' => $decode];
+            }
+        } catch (Exception $except) {
+            throw new Exception($except->getMessage(), $except->getCode(), $except);
+        }
+
+        return ['result' => null];
+    }
+
+
+    /**
      * @param string $method
      * @param string $uri
      * @param array $options
@@ -140,6 +178,11 @@ class FileMakerDataAPI
 
             switch($responseCode){
                 case 0:
+                    // only exists if we are calling a 'raw' script
+                    if(array_key_exists('scriptError', $responseArray['response'])) {
+                        return $responseArray;
+                    }
+
                     return $this->flattenRecords($responseArray['response']['data']);
                 case 401:
                     return [];
@@ -234,5 +277,4 @@ class FileMakerDataAPI
 
         throw new Exception('No response received from FileMaker are you sure the settings are correct?');
     }
-
 }

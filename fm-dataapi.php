@@ -20,9 +20,10 @@ require_once FM_DATA_API_PLUGIN_DIR . '/src/FileMakerDataAPI.php';
 require_once FM_DATA_API_PLUGIN_DIR . '/src/Plugin.php';
 require_once FM_DATA_API_PLUGIN_DIR . '/src/Admin.php';
 require_once FM_DATA_API_PLUGIN_DIR . '/src/Settings.php';
+require_once FM_DATA_API_PLUGIN_DIR . '/src/ScriptFilter.php';
+require_once FM_DATA_API_PLUGIN_DIR . '/src/ScriptParameter.php';
 require_once FM_DATA_API_PLUGIN_DIR . '/src/ShortCodeBase.php';
 require_once FM_DATA_API_PLUGIN_DIR . '/src/ShortCodeField.php';
 require_once FM_DATA_API_PLUGIN_DIR . '/src/ShortCodeTable.php';
 
 new FMDataAPI\Plugin();
-

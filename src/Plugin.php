@@ -16,6 +16,9 @@ class Plugin
     /** @var array */
     protected $shortcodes;
 
+    /** @var array */
+    protected $filters;
+
     public function __construct()
     {
         add_action('init', [$this, 'fmDataApiRegisterSession']);
@@ -27,6 +30,9 @@ class Plugin
         $this->shortcodes = [
             new ShortCodeField($api, $settings),
             new ShortCodeTable($api, $settings),
+        ];
+        $this->filters = [
+            new ScriptFilter($api, $settings)
         ];
     }
 

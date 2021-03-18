@@ -71,7 +71,7 @@ class Admin
         $html .= <<<EOHTML
         <div class="wrap">
         <h2>FileMaker Data API settings</h2>
-        <p>Enter the settings for your FileMaker sserver below. All fields are required!</p>
+        <p>Enter the settings for your FileMaker server below. All fields are required!</p>
         <hr />
         <form name="form1" method="post" action="">
             <input type="hidden" name="{$postField}" value="Y">
