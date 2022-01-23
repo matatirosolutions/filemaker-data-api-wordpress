@@ -38,7 +38,7 @@ class ShortCodeBase
                 }
                 break;
             case 'webli':
-                $content = sprintf('<a href="%s">%s</a>', $record[$field], $field);
+                $content = sprintf('<a href="%s" target="_blank">%s</a>', $record[$field], $field);
                 break;
             default:
                 $content = nl2br($record[$field]);
