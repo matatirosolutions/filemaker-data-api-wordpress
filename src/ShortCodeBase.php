@@ -37,6 +37,9 @@ class ShortCodeBase
                     $content = (money_format('%#10n', $record[$field]));
                 }
                 break;
+            case 'webli':
+                $content = sprintf('<a href="%s">%s</a>', $record[$field], $field);
+                break;
             default:
                 $content = nl2br($record[$field]);
         }

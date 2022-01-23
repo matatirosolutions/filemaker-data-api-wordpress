@@ -3,8 +3,8 @@
 Plugin Name: Integration with FileMaker Data API
 Plugin URI: https://msdev.co.uk/wp-fm-data-api
 Description: Pull data directly from FileMaker into your WordPress installation using the FileMaker Data API
-Version: 0.1
-Author: Steve Winter
+Version: 0.2
+Author: Steve Winter - Matatiro Solutions
 Author URI: https://msdev.co.uk
 License: GPL2 or later
 */

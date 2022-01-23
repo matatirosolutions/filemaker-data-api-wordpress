@@ -46,6 +46,7 @@ class ShortCodeTable extends ShortCodeBase
                 return $this->performTableQuery($attr);
             }
 
+
             $records = $this->api->findAll($attr['layout']);
 
             return $this->generateTable($records, $attr);
@@ -64,7 +65,8 @@ class ShortCodeTable extends ShortCodeBase
     private function performTableQuery(array $attr)
     {
         $query = $this->parseQueryToJSON($attr['query']);
-        $records = $this->api->find($attr['layout'], $query);
+        $sort = $this->generateSort($attr);
+        $records = $this->api->find($attr['layout'], $query, $sort);
 
         return $this->generateTable($records, $attr);
     }
@@ -96,7 +98,7 @@ class ShortCodeTable extends ShortCodeBase
             ? explode('|', $attr['types'])
             : [];
 
-        $html = '<table>';
+        $html = '<table class="' . (isset($attr['class']) ? $attr['class'] : '') .  '">';
         $html .= array_key_exists('labels', $attr)
             ? $this->generateHeaderRow($attr['labels'])
             : $this->generateHeaderRow($attr['fields']);
@@ -137,5 +139,28 @@ class ShortCodeTable extends ShortCodeBase
         $html .= '</tr></thead>';
 
         return $html;
+    }
+
+    private function generateSort(array $attr)
+    {
+        if(empty($attr['sort'])) {
+            return [];
+        }
+
+        $reformattedQuery = html_entity_decode(
+            str_replace("'", '"', $attr['sort'])
+        );
+
+        $options = json_decode($reformattedQuery, true);
+
+        $sort = [];
+        foreach($options as $field => $direction) {
+            $sort[] = [
+                'fieldName' => $field,
+                'sortOrder' => $direction
+            ];
+        }
+
+        return $sort;
     }
 }

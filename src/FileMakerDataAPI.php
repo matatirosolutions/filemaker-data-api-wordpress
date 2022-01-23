@@ -87,7 +87,7 @@ class FileMakerDataAPI
      *
      * @throws Exception
      */
-    public function find($layout, array $query)
+    public function find($layout, array $query, array $sort = [])
     {
         $queryHash = md5(
             serialize($query)
@@ -96,10 +96,15 @@ class FileMakerDataAPI
             return $this->cache[$queryHash];
         }
 
+        $payload = [
+            'query' => [$query],
+        ];
+        if(count($sort)) {
+            $payload['sort'] = $sort;
+        }
+
         $this->setOrFetchToken();
-        $body = json_encode([
-            'query' => [$query]
-        ]);
+        $body = json_encode($payload);
 
         $uri = $this->baseURI . sprintf('layouts/%s/_find', $layout);
         $records = $this->performFMRequest("POST", $uri, ['body' => $body]);
@@ -171,7 +176,6 @@ class FileMakerDataAPI
 
         $request = new WP_Http();
         $response = $request->request($uri, array_merge($params, $options));
-
         if($response) {
             $responseArray = json_decode($response['body'], true);
             $responseCode = $responseArray['messages'][0]['code'];
