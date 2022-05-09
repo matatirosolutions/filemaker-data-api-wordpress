@@ -27,7 +27,7 @@ class ShortCodeBase
         switch(substr(strtolower($type), 0, 5)) {
             case 'image':
             case 'thumb':
-                $content = $this->sizeImage($type, $record[$field]);
+                $content = $this->sizeImage($type, $record, $field);
                 break;
             case 'curre':
                 if(empty($record[$field])) {
@@ -51,8 +51,12 @@ class ShortCodeBase
         return $content;
     }
 
-    protected function sizeImage($type, $path)
+    protected function sizeImage($type, $record, $field)
     {
+        $path = $this->settings->getCache()
+            ? $this->cacheImage($record, $field)
+            : $record[$field];
+
         $params = explode('-', $type);
         $width = 'image' == $params[0]
             ? (isset($params[1]) ? $params[1] : '')
@@ -79,4 +83,37 @@ class ShortCodeBase
 
         return true;
     }
+
+    private function cacheImage($record, $field)
+    {
+        $uploads = wp_get_upload_dir();
+        $baseFolder = $uploads['basedir'] . DIRECTORY_SEPARATOR . 'fm-dataapi';
+        if(!is_dir($baseFolder)) {
+            if (!mkdir($baseFolder) && !is_dir($baseFolder)) {
+                // Can't create a cache folder so stream the content
+                return $record[$field];
+            }
+        }
+
+        $layout = strtolower(str_replace(' ', '-' , $this->api->getLayout()));
+        $layoutFolder = $baseFolder . DIRECTORY_SEPARATOR . $layout;
+        if(!is_dir($layoutFolder)) {
+            if (!mkdir($layoutFolder) && !is_dir($layoutFolder)) {
+                // Can't create a cache folder so stream the content
+                return $record[$field];
+            }
+        }
+
+        $filename = str_replace(' ', '', $field) .'-' . $record['recordId'] . '-' . $record['modId'] . '.cache';
+        $cachePath = $layoutFolder . DIRECTORY_SEPARATOR . $filename;
+        if(!file_exists($cachePath)) {
+            file_put_contents(
+                $cachePath,
+                file_get_contents($record[$field])
+            );
+        }
+
+        return $uploads['baseurl'] . '/fm-dataapi/' . $layout . '/' . $filename;
+    }
+
 }

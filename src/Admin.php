@@ -88,6 +88,9 @@ EOHTML;
                 case 'verify':
                     $html .= $this->verifyCheckbox($value);
                     break;
+                case 'cache':
+                    $html .= $this->cacheCheckbox($value);
+                    break;
                 default:
                     $html .= $this->inputBox($setting, $title, $value);
             }
@@ -153,9 +156,26 @@ EOHTML;
                 </td>
             </tr>
 EOHTML;
-
     }
 
+    private function cacheCheckbox($value)
+    {
+        $checked = $value ? ' checked' : '';
+        return <<<EOHTML
+            <tr>
+                <th scope="row"><label for="cache">Cache images</label></th>
+                <td>
+                    <input type="hidden" name="cache" value="0">
+                    <input type="checkbox" name="cache" value="1"{$checked} />
+                    <span style="font-size: 11px">
+                        Some themes will try to apply lazy loading to images which will result in issues with<br />
+                        the one-time-use signed URLs returned by the DAPI. Checking this box will save local copies<br />
+                        of requested images, stamped with a modId and serve those instead.
+                    </span>
+                </td>
+            </tr>
+EOHTML;
+    }
 
     /**
      * @return Settings
@@ -171,6 +191,7 @@ EOHTML;
                 'password' => '',
                 'verify' => 0,
                 'locale' => 'en_US',
+                'cache' => 0,
             ]);
         } catch(Exception $e) {}
     }

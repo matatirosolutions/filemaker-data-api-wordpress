@@ -25,6 +25,8 @@ class FileMakerDataAPI
 
     private $cache = [];
 
+    private $layout = '';
+
     private $retried = false;
 
     public function __construct(Settings $settings)
@@ -89,6 +91,7 @@ class FileMakerDataAPI
      */
     public function find($layout, array $query, array $sort = [])
     {
+        $this->layout = $layout;
         $queryHash = md5(
             serialize($query)
         );
@@ -125,6 +128,7 @@ class FileMakerDataAPI
      */
     function callScript($layout, $script, $param)
     {
+        $this->layout = $layout;
        $url = $this->baseURI . sprintf('layouts/%s/script/%s?script.param=%s', $layout, $script, urlencode($param));
         $this->setOrFetchToken();
 
@@ -280,5 +284,10 @@ class FileMakerDataAPI
         }
 
         throw new Exception('No response received from FileMaker are you sure the settings are correct?');
+    }
+
+    public function getLayout()
+    {
+        return $this->layout;
     }
 }

@@ -12,7 +12,7 @@ use \Exception;
 
 class Settings
 {
-    const DATA_API_PARAMETERS = ['server', 'port', 'database', 'username', 'password', 'verify', 'locale'];
+    const DATA_API_PARAMETERS = ['server', 'port', 'database', 'username', 'password', 'verify', 'locale', 'cache'];
 
     protected $server;
     protected $port;
@@ -21,6 +21,7 @@ class Settings
     protected $password;
     protected $verify;
     protected $locale;
+    protected $cache;
 
     /**
      * @param array $array
@@ -104,5 +105,13 @@ class Settings
     public function getVerify()
     {
         return $this->verify;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getCache()
+    {
+        return (bool)$this->cache;
     }
 }
