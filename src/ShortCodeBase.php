@@ -104,7 +104,7 @@ class ShortCodeBase
             }
         }
 
-        $filename = str_replace(' ', '', $field) .'-' . $record['recordId'] . '-' . $record['modId'] . '.cache';
+        $filename = strtolower(str_replace(' ', '', $field)) .'-' . $record['recordId'] . '-' . $record['modId'] . '.cache';
         $cachePath = $layoutFolder . DIRECTORY_SEPARATOR . $filename;
         if(!file_exists($cachePath)) {
             file_put_contents(
