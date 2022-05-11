@@ -123,7 +123,7 @@ class ShortCodeBase
             );
         }
 
-        return $uploads['baseurl'] . '/fm-dataapi/' . $layout . '/' . $filename;
+        return $uploads['baseurl'] . '/fm-data-api/' . $layout . '/' . $filename;
     }
 
 }
