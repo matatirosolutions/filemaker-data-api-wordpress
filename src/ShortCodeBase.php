@@ -87,7 +87,7 @@ class ShortCodeBase
     private function cacheImage($record, $field)
     {
         $uploads = wp_get_upload_dir();
-        $baseFolder = $uploads['basedir'] . DIRECTORY_SEPARATOR . 'fm-dataapi';
+        $baseFolder = $uploads['basedir'] . DIRECTORY_SEPARATOR . 'fm-data-api';
         if(!is_dir($baseFolder)) {
             if (!mkdir($baseFolder) && !is_dir($baseFolder)) {
                 // Can't create a cache folder so stream the content
@@ -106,10 +106,20 @@ class ShortCodeBase
 
         $filename = strtolower(str_replace(' ', '', $field)) .'-' . $record['recordId'] . '-' . $record['modId'] . '.cache';
         $cachePath = $layoutFolder . DIRECTORY_SEPARATOR . $filename;
+
         if(!file_exists($cachePath)) {
+            $ckfile = tempnam ("/tmp", 'cookiename');
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $record[$field]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt ($ch, CURLOPT_COOKIEJAR, $ckfile);
+            $img = curl_exec($ch);
+
             file_put_contents(
                 $cachePath,
-                file_get_contents($record[$field])
+                $img
             );
         }
 
