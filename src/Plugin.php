@@ -37,7 +37,9 @@ class Plugin
     }
 
     public function fmDataApiRegisterSession(){
-        if( !session_id() )
-            session_start();
+        if(!session_id()) {
+            session_start(['read_and_close' => true]);
+        }
     }
+
 }
