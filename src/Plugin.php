@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stevewinter
- * Date: 28/07/2018
- * Time: 12:39
- */
 
 namespace FMDataAPI;
 

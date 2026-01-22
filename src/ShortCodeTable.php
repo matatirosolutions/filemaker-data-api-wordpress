@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stevewinter
- * Date: 28/07/2018
- * Time: 13:51
- */
 
 namespace FMDataAPI;
 
@@ -66,7 +60,9 @@ class ShortCodeTable extends ShortCodeBase
     {
         $query = $this->parseQueryToJSON($attr['query']);
         $sort = $this->generateSort($attr);
-        $records = $this->api->find($attr['layout'], $query, $sort);
+        $limit = isset($attr['limit']) && is_int($attr['limit']) ? $attr['limit'] : 100;
+
+        $records = $this->api->find($attr['layout'], $query, $sort, $limit);
 
         return $this->generateTable($records, $attr);
     }

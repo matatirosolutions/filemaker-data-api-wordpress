@@ -38,7 +38,7 @@ class FileMakerDataAPI
     /**
      * @param $layout
      * @param bool|object $class
-     * 
+     *
      * @return array
      * @throws Exception
      */
@@ -50,7 +50,7 @@ class FileMakerDataAPI
         $offset = 1;
         $retrieved = 100;
         $results = [];
-        
+
         while($retrieved == 100) {
             $uri = $this->baseURI . sprintf('layouts/%s/records?_offset=%s', $layout, $offset);
             $records = $this->performFMRequest('GET', $uri, []);
@@ -89,7 +89,7 @@ class FileMakerDataAPI
      *
      * @throws Exception
      */
-    public function find($layout, array $query, array $sort = [])
+    public function find($layout, array $query, array $sort = [], int $limit = 100)
     {
         $this->layout = $layout;
         $queryHash = md5(
@@ -101,6 +101,7 @@ class FileMakerDataAPI
 
         $payload = [
             'query' => [$query],
+            'limit' => $limit,
         ];
         if(count($sort)) {
             $payload['sort'] = $sort;
