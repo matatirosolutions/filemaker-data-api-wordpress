@@ -42,23 +42,34 @@ class FileMakerDataAPI
      * @return array
      * @throws Exception
      */
-    public function findAll($layout)
+    public function findAll($layout, $limit = null)
     {
         $this->setOrFetchToken();
+
+		if($limit !== null && $limit < 100) {
+			$uri = $this->baseURI . sprintf('layouts/%s/records?_limit=%s', $layout, $limit);
+			return $this->performFMRequest('GET', $uri, []);
+		}
 
         // by default API only returns 100 records at a time, so we need to keep getting records till we run out
         $offset = 1;
         $retrieved = 100;
         $results = [];
+		$total = 0;
 
-        while($retrieved == 100) {
+        while($retrieved == 100 && ($limit === null || $limit > $total)) {
             $uri = $this->baseURI . sprintf('layouts/%s/records?_offset=%s', $layout, $offset);
             $records = $this->performFMRequest('GET', $uri, []);
             $retrieved = count($records);
             $offset += 100;
+			$total += count($records);
 
             $results = array_merge($results, $records);
         }
+
+		if($limit !== null && $total > $limit) {
+			$results = array_slice($results, 0, $limit);
+		}
 
         return $results;
     }

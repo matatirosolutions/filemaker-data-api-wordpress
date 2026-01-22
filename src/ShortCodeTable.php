@@ -40,8 +40,8 @@ class ShortCodeTable extends ShortCodeBase
                 return $this->performTableQuery($attr);
             }
 
-
-            $records = $this->api->findAll($attr['layout']);
+			$limit = isset($attr['limit']) ? (int)$attr['limit'] : null;
+			$records = $this->api->findAll($attr['layout'], $limit);
 
             return $this->generateTable($records, $attr);
         } catch (Exception $e) {
@@ -60,7 +60,7 @@ class ShortCodeTable extends ShortCodeBase
     {
         $query = $this->parseQueryToJSON($attr['query']);
         $sort = $this->generateSort($attr);
-        $limit = isset($attr['limit']) && is_int($attr['limit']) ? $attr['limit'] : 100;
+        $limit = isset($attr['limit']) ? (int)$attr['limit'] : 100;
 
         $records = $this->api->find($attr['layout'], $query, $sort, $limit);
 
@@ -72,7 +72,7 @@ class ShortCodeTable extends ShortCodeBase
      *
      * @return array
      */
-    private function parseQueryToJSON($queryString)
+    protected function parseQueryToJSON($queryString)
     {
         $reformattedQuery = html_entity_decode(
             str_replace("'", '"', $queryString)
@@ -112,6 +112,11 @@ class ShortCodeTable extends ShortCodeBase
                 $html .= sprintf('<td>%s</td>', $this->outputField($record, trim($field), $type, $link));
             }
             $html .= '</tr>';
+        }
+
+        if(count($records) === 0) {
+            $html .= '<tr><td colspan="' . count($fields) .'" style="text-align:center;">' . ($attr['message'] ?? 'No records found.') . '</td></tr>';
+
         }
 
         $html .= '</tbody></table>';
